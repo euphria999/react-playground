@@ -1,0 +1,41 @@
+.header {
+    height: 50px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #000;
+    background-color: var(--bg);
+    color: var(--text);
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .logo {
+      display: flex;
+      font-size: 20px;
+      align-items: center;
+  
+      img {
+        height: 24px;
+        margin-right: 10px;
+      }
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .theme {
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+}

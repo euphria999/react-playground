@@ -1,0 +1,271 @@
+.settings {
+  width: 400px;
+  max-height: 600px;
+  background-color: var(--bg);
+  border: 1px solid var(--text);
+  border-radius: 8px;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .header {
+    padding: 16px;
+    border-bottom: 1px solid var(--text);
+    background-color: var(--bg);
+
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .settingItem {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .keyInput {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      .input {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid var(--text);
+        border-radius: 6px;
+        background-color: var(--bg);
+        color: var(--text);
+        font-size: 14px;
+
+        &:focus {
+          outline: none;
+          border-color: #1890ff;
+        }
+
+        &::placeholder {
+          color: var(--text);
+          opacity: 0.5;
+        }
+      }
+
+      .toggleBtn {
+        padding: 8px 12px;
+        background: none;
+        border: 1px solid var(--text);
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--text);
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: var(--text);
+          color: var(--bg);
+        }
+      }
+    }
+
+    .select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--text);
+      border-radius: 6px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: #1890ff;
+      }
+    }
+
+    .range {
+      width: 80%;
+      margin-right: 12px;
+    }
+
+    .rangeValue {
+      font-weight: 500;
+      color: #1890ff;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--text);
+      opacity: 0.6;
+      margin: 4px 0 0 0;
+      line-height: 1.4;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+
+    button {
+      padding: 8px 16px;
+      border: 1px solid var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .testBtn {
+      background-color: #1890ff;
+      color: white;
+      border-color: #1890ff;
+
+      &:hover:not(:disabled) {
+        background-color: #40a9ff;
+      }
+    }
+
+    .saveBtn {
+      background-color: #52c41a;
+      color: white;
+      border-color: #52c41a;
+
+      &:hover:not(:disabled) {
+        background-color: #73d13d;
+      }
+    }
+
+    .dangerBtn {
+      background-color: #ff4d4f;
+      color: white;
+      border-color: #ff4d4f;
+
+      &:hover {
+        background-color: #ff7875;
+      }
+    }
+  }
+
+  .status {
+    h4 {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .statusItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+
+      .connected {
+        color: #52c41a;
+        font-weight: 500;
+      }
+
+      .disconnected {
+        color: #ff4d4f;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// 暗色主题特定样式
+.dark {
+  .settingItem {
+    .keyInput {
+      .input {
+        border-color: #444;
+        
+        &:focus {
+          border-color: #1890ff;
+        }
+      }
+
+      .toggleBtn {
+        border-color: #444;
+
+        &:hover {
+          background-color: #444;
+          color: white;
+        }
+      }
+    }
+
+    .select {
+      border-color: #444;
+      
+      &:focus {
+        border-color: #1890ff;
+      }
+    }
+  }
+
+  .header {
+    border-bottom-color: #444;
+  }
+}
+
+// 亮色主题特定样式
+.light {
+  .settingItem {
+    .keyInput {
+      .input {
+        border-color: #d9d9d9;
+        
+        &:focus {
+          border-color: #1890ff;
+        }
+      }
+
+      .toggleBtn {
+        border-color: #d9d9d9;
+
+        &:hover {
+          background-color: #f5f5f5;
+          color: #333;
+        }
+      }
+    }
+
+    .select {
+      border-color: #d9d9d9;
+      
+      &:focus {
+        border-color: #1890ff;
+      }
+    }
+  }
+
+  .header {
+    border-bottom-color: #f0f0f0;
+  }
+}
