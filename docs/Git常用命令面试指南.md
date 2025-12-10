@@ -42,6 +42,10 @@ git config --global alias.ci commit
 
 ## 仓库初始化与克隆
 
+**什么时候用 `git init`？** 当你想要在一个已有的项目目录中开始使用 Git 进行版本控制时，或者从零开始一个新项目时使用。它会在当前目录创建一个 `.git` 子目录，用于存放版本库的所有元数据。
+
+**什么时候用 `git clone`？** 当你想要参与一个已经存在的项目时使用。这个项目通常托管在远程服务器上（如 GitHub）。`clone` 会将整个远程仓库的完整历史复制到你的本地机器上。
+
 ### 初始化新仓库
 ```bash
 # 在项目目录下初始化 Git 仓库
@@ -82,6 +86,9 @@ M  src/App.tsx              # 已修改，已暂存
 ```
 
 ### 添加文件到暂存区
+
+`git add` 命令将工作区的修改内容添加到**暂存区（Staging Area）**。暂存区是一个非常重要的概念，它像一个“购物车”，让你在提交（commit）之前，可以精心挑选和准备你想要包含在下一次提交里的内容。这使得你可以将一个大的修改拆分成多个逻辑上独立的提交，让提交历史更清晰。
+
 ```bash
 # 添加特定文件
 git add src/App.tsx
@@ -120,6 +127,16 @@ git commit
 # 修改最后一次提交
 git commit --amend
 ```
+
+**`--amend` 的使用场景：**
+当你提交后（`git commit`），但**还未推送**（`git push`）时，发现：
+- 提交信息写错了（比如有错别字，或者不符合规范）。
+- 漏掉了一个文件。
+- 本次提交还想再包含一些小的改动。
+
+这时，`git commit --amend` 就是你的“后悔药”。它不会创建一次新的提交，而是将你的新改动或新的提交信息**合并到上一次的提交中**，生成一个新的提交来替换它。这让你的提交历史保持整洁，避免了 "fix typo" 或 "add forgotten file" 这样的零碎提交。
+
+**注意：** 如果你已经将提交推送到了远程仓库，请**不要**使用 `git commit --amend`，因为它会改写历史，需要强制推送（`git push -f`），这会给其他协作者带来麻烦。
 
 **规范的提交信息格式：**
 ```bash
@@ -190,6 +207,11 @@ git merge --no-ff feature/ai-assistant
 git merge --continue
 ```
 
+**`--no-ff` 的重要性：**
+默认情况下，如果 `main` 分支在 `feature/ai-assistant` 分支创建后没有新的提交，`git merge` 会执行“快进”（Fast-forward）合并。这会直接将 `main` 指针移动到 `feature/ai-assistant` 的最新提交，不会产生新的合并提交。这样做会丢失功能分支的开发历史。
+
+使用 `git merge --no-ff` 会强制创建一个新的合并提交，即使是快进合并。这会保留功能分支的完整历史，使得从提交图谱中可以清楚地看到该分支的起点和终点，便于代码审查和版本回溯。**在团队协作中，推荐总是使用 `--no-ff`。**
+
 **实际场景（合并冲突处理）：**
 ```bash
 # 合并时出现冲突
@@ -223,6 +245,16 @@ git push origin --delete feature/old-feature
 ```
 
 ### 变基（Rebase）
+
+**什么时候用 `rebase`？**
+`rebase`（变基）是合并代码的另一种方式，它可以让提交历史变得非常整洁，呈线性。它的原理是：找到两个分支的共同祖先，然后将当前分支（如 `feature`）的提交“变基”到目标分支（如 `main`）的最新提交之后。
+
+**`rebase` vs `merge` 的核心选择原则：**
+- **个人分支整理**：在将你的功能分支推送到远程仓库之前，使用 `rebase` 与最新的 `main` 分支同步，可以清理和整合你的本地提交（使用交互式变基 `rebase -i`），让你的提交记录清晰明了。
+- **避免在公共分支上 `rebase`**：**永远不要**对已经推送到远程并被他人使用的公共分支（如 `main`, `develop`）进行 `rebase` 操作。因为 `rebase` 会改写提交历史，这会导致其他团队成员的本地仓库与远程仓库产生严重冲突。
+
+**一句话总结：用 `rebase` 让自己的提交历史变干净，用 `merge` 把大家的工作合到一起。**
+
 ```bash
 # 将当前分支变基到 main
 git rebase main
@@ -303,7 +335,7 @@ git fetch --all
 git pull --rebase origin main
 ```
 
-**pull 与 fetch 的区别：**
+**`pull` 与 `fetch` 的区别与安全实践：**
 ```bash
 # git pull = git fetch + git merge
 git pull origin main
@@ -312,6 +344,16 @@ git pull origin main
 git fetch origin
 git merge origin/main
 ```
+
+**为什么推荐先 `fetch`？**
+直接使用 `git pull` 可能会在你不注意的时候自动合并远程代码，如果存在冲突，你的工作目录会立即进入冲突状态。
+
+一个更安全、更可控的工作流程是：
+1.  `git fetch origin`：先将远程的最新代码下载到本地（比如 `origin/main` 分支），但**不**与你本地的 `main` 分支合并。
+2.  `git log main..origin/main`：查看 `origin/main` 比你的 `main` 多了哪些提交，做到心中有数。
+3.  `git merge origin/main` 或 `git rebase origin/main`：在清楚了解远程变更后，再手动选择合并或变基。
+
+这个流程让你有机会在合并前审查代码，从而更从容地处理潜在的冲突。
 
 ---
 
@@ -424,22 +466,37 @@ git reset --hard HEAD~1
 git reset --hard a1b2c3d
 ```
 
-**三种 reset 模式的区别：**
+**三种 reset 模式的区别与使用场景：**
 ```bash
 # --soft: 仅移动 HEAD，保留暂存区和工作区
 git reset --soft HEAD~1
-# 结果：提交被撤销，但改动仍在暂存区
+# 场景：你刚刚的提交信息写错了，或者少提交了几个文件。
+# 操作：执行 soft reset 后，所有改动都在暂存区，你可以重新 `git commit`。
 
 # --mixed（默认）: 移动 HEAD，重置暂存区，保留工作区
 git reset HEAD~1
-# 结果：提交被撤销，改动回到工作区（未暂存）
+# 场景：你刚刚的提交包含了不想提交的代码，或者你想把一次提交拆分成多次。
+# 操作：执行 mixed reset 后，改动回到了工作区，你可以重新使用 `git add` 来组织你的提交。
 
 # --hard: 全部重置（危险！会丢失修改）
 git reset --hard HEAD~1
-# 结果：提交被撤销，所有改动都丢失
+# 场景：你刚刚的提交完全是错误的，你想彻底放弃这些修改。
+# 操作：执行 hard reset 后，工作区和暂存区都会被重置到上一个提交的状态。**执行前请三思！**
 ```
 
 ### Revert（创建新提交来撤销）
+**什么时候必须用 `revert`？**
+当一个错误的提交已经被推送到了远程的公共分支（如 `main` 或 `develop`），并且团队其他成员可能已经拉取了这个提交时，**绝对不能**使用 `git reset` 来回退，因为这会改写历史，导致每个人的代码库历史不一致，造成混乱。
+
+`git revert` 是专门为这种情况设计的安全工具。它不会删除或修改旧的提交，而是会**创建一个新的提交**，这个新提交的内容正好是指定提交的逆向操作。
+
+**场景示例：**
+1. 你推送了一个有 Bug 的提交 `a1b2c3d` 到 `main` 分支。
+2. 团队成员已经 `git pull` 了你的代码。
+3. 你不能用 `reset`，否则会强制推送，搞乱他们的历史。
+4. 你执行 `git revert a1b2c3d`，Git 会创建一个新的提交 `e5f6g7h`，内容是撤销 `a1b2c3d` 的所有修改。
+5. 你再 `git push` 这个新提交，所有人的历史都会向前推进，同时代码也恢复到了 `a1b2c3d` 之前的状态，整个过程是安全且透明的。
+
 ```bash
 # 撤销指定提交（保留历史）
 git revert a1b2c3d
@@ -526,6 +583,10 @@ git stash drop stash@{0}
 git stash clear
 ```
 
+**`pop` vs `apply`:**
+- `git stash pop`: 应用最近一次的暂存，然后**从暂存列表中删除它**。通常用于“我马上就要回来继续”的场景。
+- `git stash apply`: 应用最近一次的暂存，但**保留它在暂存列表中**。适用于你可能需要在多个分支上应用同一次暂存的修改的场景。
+
 **实际场景：**
 ```bash
 # 正在开发功能时，需要紧急修复 bug
@@ -603,6 +664,25 @@ git cherry-pick a1b2c3d
 # 挑选多个提交
 git cherry-pick a1b2c3d b2c3d4e
 ```
+
+**`cherry-pick` 的典型应用场景：**
+想象一下你们有一个 `main` 分支用于稳定版本，一个 `develop` 分支用于日常开发。
+1.  一个紧急的 Bug 在 `develop` 分支上被修复了，对应的提交是 `a1b2c3d`。
+2.  这个 Bug 同样存在于 `main` 分支的线上版本，需要立刻修复。
+3.  但是 `develop` 分支上还有很多其他未完成的功能，不能直接将整个 `develop` 分支合并到 `main`。
+
+这时，`cherry-pick` 就派上了用场：
+```bash
+# 1. 切换到稳定分支
+git checkout main
+
+# 2. 从 develop 分支“摘取”修复 Bug 的那一个提交
+git cherry-pick a1b2c3d
+
+# 3. 推送到远程，发布修复版本
+git push origin main
+```
+这样，你就精确地将 Bug 修复代码应用到了稳定版，而没有引入任何不相关的功能。
 
 ---
 
