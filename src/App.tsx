@@ -1,28 +1,20 @@
-import ReactPlayground from './ReactPlayground';
-import './App.scss'
 import { useEffect } from 'react';
+import { App as AntdApp } from 'antd';
+import ReactPlayground from './ReactPlayground';
+import './App.scss';
 
 function App() {
-  // 预加载关键资源
   useEffect(() => {
-    // 预加载Monaco编辑器
-    import('./ReactPlayground/components/CodeEditor').catch(() => {
-      // 静默处理错误
-    });
-    
-    // 预加载AI助手
-    import('./ReactPlayground/components/AIAssistant').catch(() => {
-      // 静默处理错误
-    });
-    
-    // 预加载预览组件
-    import('./ReactPlayground/components/Preview').catch(() => {
-      // 静默处理错误
-    });
+    import('./ReactPlayground/components/CodeEditor').catch(() => {});
+    import('./ReactPlayground/components/AIAssistant').catch(() => {});
+    import('./ReactPlayground/components/Preview').catch(() => {});
   }, []);
 
-  return <ReactPlayground/>
+  return (
+    <AntdApp>
+      <ReactPlayground />
+    </AntdApp>
+  );
 }
 
-export default App
-
+export default App;

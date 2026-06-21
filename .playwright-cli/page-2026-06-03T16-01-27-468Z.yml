@@ -1,0 +1,101 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - heading "🤖 AI 仓库代理" [level=3] [ref=e36]
+        - generic [ref=e37]:
+          - button "⚙" [ref=e38] [cursor=pointer]
+          - button "🗏" [ref=e39] [cursor=pointer]
+          - button "⏹" [ref=e206] [cursor=pointer]
+          - button "×" [ref=e40] [cursor=pointer]
+      - generic [ref=e209]:
+        - generic [ref=e211]:
+          - generic [ref=e212]: 👤
+          - generic [ref=e213]:
+            - generic [ref=e214]: 直接实现一个 Todo List，支持新增、完成、删除，并直接修改当前示例代码
+            - generic [ref=e215]: 00:01:23
+        - generic [ref=e217]:
+          - generic [ref=e218]: 🤖
+          - generic [ref=e219]:
+            - generic [ref=e221]: "|"
+            - generic [ref=e222]: 00:01:23
+      - generic [ref=e52]:
+        - textbox "代理正在执行中..." [disabled] [ref=e223]
+        - button "执行中..." [disabled] [ref=e224]
+      - generic [ref=e55]:
+        - generic [ref=e58]: running
+        - generic [ref=e60]: deepseek-chat
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - img "logo" [ref=e11]
+          - generic [ref=e12]: React Playground
+        - generic [ref=e13]:
+          - img "moon" [ref=e14] [cursor=pointer]:
+            - img [ref=e15]
+          - img "share-alt" [ref=e17] [cursor=pointer]:
+            - img [ref=e18]
+          - img "download" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+      - generic [ref=e25]:
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e64]: main.tsx
+            - generic [ref=e66] [cursor=pointer]: App.tsx
+            - generic [ref=e67] [cursor=pointer]:
+              - generic [ref=e68]: App.css
+              - img [ref=e70]
+            - generic [ref=e74] [cursor=pointer]: import-map.json
+            - generic [ref=e75]: +
+          - code [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e81]:
+                - generic [ref=e84]: "1"
+                - generic [ref=e86]: "2"
+                - generic [ref=e88]: "3"
+                - generic [ref=e89]:
+                  - generic [ref=e90] [cursor=pointer]: 
+                  - generic [ref=e91]: "4"
+                - generic [ref=e93]: "5"
+                - generic [ref=e95]: "6"
+                - generic [ref=e96]:
+                  - generic [ref=e97] [cursor=pointer]: 
+                  - generic [ref=e98]: "7"
+                - generic [ref=e99]:
+                  - generic [ref=e100] [cursor=pointer]: 
+                  - generic [ref=e101]: "8"
+                - generic [ref=e103]: "9"
+                - generic [ref=e104]:
+                  - generic [ref=e105] [cursor=pointer]: 
+                  - generic [ref=e106]: "10"
+                - generic [ref=e108]: "11"
+                - generic [ref=e111]: "12"
+                - generic [ref=e113]: "13"
+                - generic [ref=e115]: "14"
+                - generic [ref=e117]: "15"
+                - generic [ref=e119]: "16"
+                - generic [ref=e121]: "17"
+              - generic [ref=e167]:
+                - generic [ref=e169]: "import { useState } from 'react'"
+                - generic [ref=e171]: import './App.css'
+                - generic [ref=e174]: "function App() {"
+                - generic [ref=e176]: const [count, setCount] = useState(0)
+                - generic [ref=e179]: return (
+                - generic [ref=e181]: <>
+                - generic [ref=e183]: <h1>Hello World</h1>
+                - generic [ref=e185]: <div className='card'>
+                - generic [ref=e187]: "<button onClick={() => setCount((count) => count +"
+                - generic [ref=e189]: "1)}>count is {count}</button>"
+                - generic [ref=e191]: </div>
+                - generic [ref=e193]: </>
+                - generic [ref=e195]: )
+                - generic [ref=e197]: "}"
+                - generic [ref=e200]: export default App
+              - textbox "Editor content" [ref=e202]
+        - iframe [ref=e204]:
+          - generic [ref=f1e2]:
+            - heading "Hello World" [level=1] [ref=f1e3]
+            - button "count is 0" [ref=f1e5] [cursor=pointer]
+  - generic [ref=e205]:
+    - alert
+    - alert

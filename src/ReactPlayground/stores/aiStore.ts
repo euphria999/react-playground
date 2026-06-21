@@ -1,15 +1,14 @@
 import { create } from 'zustand';
-import { OptimizedAIService } from '../services/optimizedAI';
+import { OptimizedAIService, type StreamStatus } from '../services/optimizedAI';
 import { useFileStore } from './fileStore';
 
-// AI 设置接口
 export interface AISettings {
-  model: 'gpt-3.5-turbo' | 'gpt-4';
+  apiKey: string;
+  model: string;
   maxTokens: number;
   temperature: number;
 }
 
-// AI 消息接口
 export interface AIMessage {
   id: string;
   role: 'user' | 'assistant';
@@ -17,156 +16,191 @@ export interface AIMessage {
   timestamp: number;
 }
 
+interface AIAssistantState {
+  isOpen: boolean;
+  messages: AIMessage[];
+  isLoading: boolean;
+  isStreaming: boolean;
+  reconnectHint: string;
+}
+
 interface AIStore {
   aiSettings: AISettings;
-  aiAssistant: {
-    isOpen: boolean;
-    messages: AIMessage[];
-    isLoading: boolean;
-    isStreaming: boolean;
-  };
+  aiAssistant: AIAssistantState;
   aiService: OptimizedAIService | null;
   setAISettings: (settings: Partial<AISettings>) => void;
-  setAIAssistant: (updates: Partial<AIStore['aiAssistant']>) => void;
+  setAIAssistant: (updates: Partial<AIAssistantState>) => void;
   sendAIMessage: (message: string) => Promise<void>;
   cancelAIRequest: () => void;
 }
 
-// 从 localStorage 获取 AI 设置
+const DEFAULT_AI_SETTINGS: AISettings = {
+  apiKey: '',
+  model: 'deepseek-chat',
+  maxTokens: 3000,
+  temperature: 0.3
+};
+
 const getStoredAISettings = (): AISettings => {
   try {
     const stored = localStorage.getItem('react-playground-ai-settings');
-    return stored ? JSON.parse(stored) : {
-      model: 'gpt-3.5-turbo' as const,
-      maxTokens: 1000,
-      temperature: 0.3
+    if (!stored) {
+      return DEFAULT_AI_SETTINGS;
+    }
+
+    const parsed = JSON.parse(stored) as Partial<AISettings>;
+
+    return {
+      apiKey: typeof parsed.apiKey === 'string' ? parsed.apiKey : DEFAULT_AI_SETTINGS.apiKey,
+      model: parsed.model && !/^gpt-/.test(parsed.model) ? parsed.model : DEFAULT_AI_SETTINGS.model,
+      maxTokens: typeof parsed.maxTokens === 'number' ? parsed.maxTokens : DEFAULT_AI_SETTINGS.maxTokens,
+      temperature: typeof parsed.temperature === 'number' ? parsed.temperature : DEFAULT_AI_SETTINGS.temperature
     };
   } catch {
-    return {
-      model: 'gpt-3.5-turbo' as const,
-      maxTokens: 1000,
-      temperature: 0.3
-    };
+    return DEFAULT_AI_SETTINGS;
   }
 };
 
+const buildEditorContext = () => {
+  const { files, selectedFileName } = useFileStore.getState();
+  const currentFile = files[selectedFileName];
+
+  if (!currentFile) {
+    return undefined;
+  }
+
+  return `当前文件: ${currentFile.name}\n语言: ${currentFile.language}\n代码:\n${currentFile.value}`;
+};
+
+const getReconnectHint = (status: StreamStatus) => (
+  status === 'recovering' ? '连接中断，正在恢复...' : ''
+);
+
 export const useAIStore = create<AIStore>((set, get) => {
   const initialSettings = getStoredAISettings();
-  
+
   return {
     aiSettings: initialSettings,
     aiAssistant: {
       isOpen: false,
       messages: [],
       isLoading: false,
-      isStreaming: false
+      isStreaming: false,
+      reconnectHint: ''
     },
     aiService: new OptimizedAIService(initialSettings),
-    
+
     setAISettings: (updates) => {
       const { aiSettings } = get();
       const newSettings = { ...aiSettings, ...updates };
-      
-      // 保存到 localStorage
+
       try {
         localStorage.setItem('react-playground-ai-settings', JSON.stringify(newSettings));
       } catch (error) {
         console.warn('Failed to save AI settings:', error);
       }
-      
-      // 更新 AI 服务
-      const aiService = new OptimizedAIService(newSettings);
-      set({ aiSettings: newSettings, aiService });
+
+      set({
+        aiSettings: newSettings,
+        aiService: new OptimizedAIService(newSettings)
+      });
     },
-    // 设置 AI 助手
+
     setAIAssistant: (updates) => {
       const { aiAssistant } = get();
       set({ aiAssistant: { ...aiAssistant, ...updates } });
     },
-    // 发送 AI 消息
+
     sendAIMessage: async (message) => {
-      const { aiService, aiAssistant, setAIAssistant } = get();
-      if (!aiService) throw new Error('AI 服务未初始化');
-      
-      setAIAssistant({ isStreaming: true });
-      
-      // 添加用户消息
+      const { aiService, aiAssistant, aiSettings, setAIAssistant } = get();
+      if (!aiService) {
+        throw new Error('AI 服务未初始化');
+      }
+
+      if (!aiSettings.apiKey.trim()) {
+        throw new Error('请先在 AI 设置中填写 API Key');
+      }
+
+      const previousMessages = aiAssistant.messages;
+      const timestamp = Date.now();
       const userMessage: AIMessage = {
-        id: Date.now().toString(),
+        id: `${timestamp}`,
         role: 'user',
         content: message,
-        timestamp: Date.now()
+        timestamp
       };
-      
-      setAIAssistant({ 
-        messages: [...aiAssistant.messages, userMessage] 
-      });
-      
-      // 添加空的 AI 消息
-      const aiMessageId = (Date.now() + 1).toString();
+      const aiMessageId = `${timestamp + 1}`;
       const aiMessage: AIMessage = {
         id: aiMessageId,
         role: 'assistant',
         content: '',
-        timestamp: Date.now()
+        timestamp: timestamp + 1
       };
-      
-      setAIAssistant({ 
-        messages: [...get().aiAssistant.messages, aiMessage] 
+
+      setAIAssistant({
+        isStreaming: true,
+        isLoading: false,
+        reconnectHint: '',
+        messages: [...previousMessages, userMessage, aiMessage]
       });
-      
+
       try {
-        // 准备上下文
-        const { files, selectedFileName } = useFileStore.getState();
-        const currentFile = files[selectedFileName];
-        const context = currentFile ? 
-          `当前文件：${currentFile.name}\n语言：${currentFile.language}\n代码：\n${currentFile.value}` : 
-          undefined;
-        
-        const conversationHistory = get().aiAssistant.messages.slice(-10);
-        
+        const conversationHistory = previousMessages.slice(-10);
+
         await aiService.chatStreamOptimized(
           message,
-          context,
+          buildEditorContext(),
           conversationHistory,
           (chunk) => {
-            const { aiAssistant } = get();
+            const { aiAssistant: current } = get();
             setAIAssistant({
-              messages: aiAssistant.messages.map(msg => 
-                msg.id === aiMessageId 
-                  ? { ...msg, content: msg.content + chunk }
+              messages: current.messages.map(msg => (
+                msg.id === aiMessageId
+                  ? { ...msg, content: `${msg.content}${chunk}` }
                   : msg
-              )
+              ))
+            });
+          },
+          (status) => {
+            setAIAssistant({
+              isStreaming: true,
+              reconnectHint: getReconnectHint(status)
             });
           }
         );
-        
-      } catch (error: any) {
-        const { aiAssistant } = get();
+      } catch (error) {
+        const { aiAssistant: current } = get();
+        const errorMessage = error instanceof Error ? error.message : '未知错误';
+
         setAIAssistant({
-          messages: aiAssistant.messages.map(msg => 
-            msg.id === aiMessageId 
-              ? { ...msg, content: `抱歉，发生了错误：${error?.message || '未知错误'}` }
+          messages: current.messages.map(msg => (
+            msg.id === aiMessageId
+              ? { ...msg, content: `抱歉，发生了错误：${errorMessage}` }
               : msg
-          )
+          )),
+          reconnectHint: ''
         });
       } finally {
-        setAIAssistant({ isStreaming: false });
-      }
-    },
-    // 取消 AI 请求
-    cancelAIRequest: () => {
-      const { aiService } = get();
-      if (aiService) {
-        aiService.cancelCurrentStream();
-        set({ 
-          aiAssistant: { 
-            ...get().aiAssistant, 
-            isStreaming: false, 
-            isLoading: false 
-          } 
+        setAIAssistant({
+          isStreaming: false,
+          isLoading: false,
+          reconnectHint: ''
         });
       }
     },
+
+    cancelAIRequest: () => {
+      const { aiService } = get();
+      aiService?.cancelCurrentStream();
+
+      set({
+        aiAssistant: {
+          ...get().aiAssistant,
+          isStreaming: false,
+          isLoading: false,
+          reconnectHint: ''
+        }
+      });
+    }
   };
 });

@@ -15,7 +15,8 @@ export interface Files {
 }
 // AI 设置接口 (移除API Key，后端统一管理)
 export interface AISettings {
-  model: 'gpt-3.5-turbo' | 'gpt-4'
+  apiKey: string
+  model: 'deepseek-chat' | 'deepseek-reasoner'
   maxTokens: number
   temperature: number // 创新程度
 }
@@ -86,17 +87,29 @@ const getStoredTheme = (): Theme => {
 const getStoredAISettings = (): AISettings => {
   try {
     const stored = localStorage.getItem('react-playground-ai-settings')
-    return stored ? JSON.parse(stored) : {
-      model: 'gpt-3.5-turbo' as const,
-      maxTokens: 1000,
-      temperature: 0.3
+    if (!stored) {
+      return {
+        apiKey: '',
+        model: 'deepseek-chat' as const,
+        maxTokens: 1000,
+        temperature: 0.3
+      }
+    }
+    const parsed = JSON.parse(stored) as Partial<AISettings> & { model?: string }
+    const model = parsed.model && /^gpt-/.test(parsed.model) ? 'deepseek-chat' : (parsed.model || 'deepseek-chat')
+    return {
+      apiKey: typeof parsed.apiKey === 'string' ? parsed.apiKey : '',
+      model: model as AISettings['model'],
+      maxTokens: typeof parsed.maxTokens === 'number' ? parsed.maxTokens : 1000,
+      temperature: typeof parsed.temperature === 'number' ? parsed.temperature : 0.3
     }
   } catch {
     return {
-      model: 'gpt-3.5-turbo' as const,
-      maxTokens: 1000,
-      temperature: 0.3
-    }
+        apiKey: '',
+        model: 'deepseek-chat' as const,
+        maxTokens: 1000,
+        temperature: 0.3
+      }
   }
 }
 

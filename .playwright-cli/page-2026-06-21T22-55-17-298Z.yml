@@ -1,0 +1,63 @@
+- generic [ref=e48]:
+  - banner [ref=e50]:
+    - generic [ref=e51]:
+      - link "Railway Logo" [ref=e52] [cursor=pointer]:
+        - /url: /
+        - img "Railway Logo" [ref=e54]
+      - button "New project" [ref=e60] [cursor=pointer]:
+        - img [ref=e62]
+        - generic [ref=e64]: New project
+    - navigation [ref=e65]:
+      - button "Login" [ref=e67] [cursor=pointer]
+  - region [ref=e74]:
+    - generic [ref=e79]:
+      - img [ref=e80]
+      - generic [ref=e83]:
+        - generic:
+          - img
+          - button "Create to-do list function with a database" [ref=e84]:
+            - generic [ref=e88]:
+              - combobox [expanded] [ref=e91]
+              - listbox "Suggestions" [ref=e92]:
+                - generic [ref=e93]:
+                  - option "Create to-do list function with a database" [selected] [ref=e94] [cursor=pointer]:
+                    - generic [ref=e95]:
+                      - img [ref=e97]
+                      - text: Create to-do list function with a database
+                  - option "Deploy Redis, Postgres, and a Bucket" [ref=e99] [cursor=pointer]:
+                    - generic [ref=e100]:
+                      - img [ref=e102]
+                      - text: Deploy Redis, Postgres, and a Bucket
+                  - separator [ref=e104]
+                  - option "GitHub Repository" [ref=e105] [cursor=pointer]:
+                    - generic [ref=e106]:
+                      - img [ref=e108]
+                      - text: GitHub Repository
+                      - img [ref=e111]
+                  - option "Database" [ref=e113] [cursor=pointer]:
+                    - generic [ref=e114]:
+                      - img [ref=e116]
+                      - text: Database
+                      - img [ref=e121]
+                  - option "Template" [ref=e123] [cursor=pointer]:
+                    - generic [ref=e124]:
+                      - img [ref=e126]
+                      - text: Template
+                      - img [ref=e129]
+                  - option "Docker Image" [ref=e131] [cursor=pointer]:
+                    - generic [ref=e132]:
+                      - img [ref=e134]
+                      - text: Docker Image
+                      - img [ref=e137]
+                  - option "Function" [ref=e139] [cursor=pointer]:
+                    - generic [ref=e140]:
+                      - img [ref=e142]
+                      - text: Function
+                  - option "Bucket" [ref=e145] [cursor=pointer]:
+                    - generic [ref=e146]:
+                      - img [ref=e148]
+                      - text: Bucket
+                  - option "Empty Project" [ref=e151] [cursor=pointer]:
+                    - generic [ref=e152]:
+                      - img [ref=e154]
+                      - text: Empty Project

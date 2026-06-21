@@ -1,0 +1,99 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e34]:
+      - generic [ref=e182]:
+        - heading "🤖 AI 仓库代理" [level=3] [ref=e183]
+        - generic [ref=e184]:
+          - button "⚙" [ref=e185] [cursor=pointer]
+          - button "🗏" [disabled] [ref=e186]
+          - button "×" [ref=e187] [cursor=pointer]
+      - generic [ref=e189]:
+        - generic [ref=e190]: 🤖
+        - heading "你好，我是你的 AI 仓库代理" [level=4] [ref=e191]
+        - paragraph [ref=e192]: 我可以帮你：
+        - list [ref=e193]:
+          - listitem [ref=e194]: 读取和分析当前仓库
+          - listitem [ref=e195]: 搜索代码并解释实现
+          - listitem [ref=e196]: 提出或执行修改方案
+          - listitem [ref=e197]: 运行测试和构建命令
+          - listitem [ref=e198]: 在危险操作前向你发起审批
+      - generic [ref=e199]:
+        - textbox "让代理读取项目、搜索代码或执行修改..." [ref=e200]
+        - button "发送" [disabled] [ref=e201]
+      - generic [ref=e202]:
+        - generic [ref=e205]: 待命
+        - generic [ref=e207]: deepseek-chat
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - img "logo" [ref=e11]
+          - generic [ref=e12]: React Playground
+        - generic [ref=e13]:
+          - img "moon" [ref=e14] [cursor=pointer]:
+            - img [ref=e15]
+          - img "share-alt" [ref=e17] [cursor=pointer]:
+            - img [ref=e18]
+          - img "download" [ref=e20] [cursor=pointer]:
+            - img [ref=e21]
+      - generic [ref=e25]:
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - generic [ref=e40]: main.tsx
+            - generic [ref=e42] [cursor=pointer]: App.tsx
+            - generic [ref=e43] [cursor=pointer]:
+              - generic [ref=e44]: App.css
+              - img [ref=e46]
+            - generic [ref=e50] [cursor=pointer]: import-map.json
+            - generic [ref=e51]: +
+          - code [ref=e54]:
+            - generic [ref=e55]:
+              - generic [ref=e57]:
+                - generic [ref=e210]: "1"
+                - generic [ref=e212]: "2"
+                - generic [ref=e214]: "3"
+                - generic [ref=e215]:
+                  - generic [ref=e216] [cursor=pointer]: 
+                  - generic [ref=e217]: "4"
+                - generic [ref=e219]: "5"
+                - generic [ref=e221]: "6"
+                - generic [ref=e222]:
+                  - generic [ref=e223] [cursor=pointer]: 
+                  - generic [ref=e224]: "7"
+                - generic [ref=e225]:
+                  - generic [ref=e226] [cursor=pointer]: 
+                  - generic [ref=e227]: "8"
+                - generic [ref=e229]: "9"
+                - generic [ref=e230]:
+                  - generic [ref=e231] [cursor=pointer]: 
+                  - generic [ref=e232]: "10"
+                - generic [ref=e234]: "11"
+                - generic [ref=e237]: "12"
+                - generic [ref=e239]: "13"
+                - generic [ref=e241]: "14"
+                - generic [ref=e243]: "15"
+                - generic [ref=e245]: "16"
+                - generic [ref=e247]: "17"
+              - generic [ref=e143]:
+                - generic [ref=e293]: "import { useState } from 'react'"
+                - generic [ref=e295]: import './App.css'
+                - generic [ref=e298]: "function App() {"
+                - generic [ref=e300]: const [count, setCount] = useState(0)
+                - generic [ref=e303]: return (
+                - generic [ref=e305]: <>
+                - generic [ref=e307]: <h1>Hello World</h1>
+                - generic [ref=e309]: <div className='card'>
+                - generic [ref=e311]: "<button onClick={() => setCount((count)"
+                - generic [ref=e313]: "=> count + 1)}>count is {count}</button>"
+                - generic [ref=e315]: </div>
+                - generic [ref=e317]: </>
+                - generic [ref=e319]: )
+                - generic [ref=e321]: "}"
+                - generic [ref=e324]: export default App
+              - textbox "Editor content" [ref=e178]
+        - iframe [ref=e180]:
+          - generic [ref=f3e2]:
+            - heading "Hello World" [level=1] [ref=f3e3]
+            - button "count is 0" [ref=f3e5] [cursor=pointer]
+  - generic [ref=e181]:
+    - alert
+    - alert

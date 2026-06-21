@@ -1,0 +1,6 @@
+- generic [ref=e3]:
+  - heading "Todo List" [level=1] [ref=e4]
+  - generic [ref=e5]:
+    - textbox "添加新任务..." [ref=e6]
+    - button "添加" [ref=e7] [cursor=pointer]
+  - list

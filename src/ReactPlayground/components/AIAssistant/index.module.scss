@@ -128,9 +128,14 @@
   }
 }
 
-.messages {
+.messagesWrap {
+  position: relative;
   flex: 1;
-  overflow-y: auto;
+  min-height: 0;
+}
+
+.messages {
+  height: 100%;
   padding: 16px;
 
   .welcome {
@@ -254,6 +259,70 @@
       .messageText {
         margin-bottom: 4px;
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
+
+        .markdownText {
+          white-space: normal;
+
+          p {
+            margin: 0 0 8px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+
+          ul, ol {
+            margin: 0 0 8px;
+            padding-left: 20px;
+          }
+        }
+
+        .inlineCode {
+          font-family: 'Fira Code', 'Consolas', monospace;
+          font-size: 12px;
+          padding: 2px 6px;
+          border-radius: 6px;
+          background: rgba(127, 127, 127, 0.15);
+        }
+
+        .codeBlock {
+          margin: 8px 0;
+          border-radius: 10px;
+          overflow-x: auto;
+          font-size: 12px;
+          line-height: 1.6;
+        }
+
+        .codeBlockWrap {
+          position: relative;
+        }
+
+        .copyBtn {
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          z-index: 2;
+          padding: 4px 8px;
+          border: 1px solid rgba(127, 127, 127, 0.45);
+          border-radius: 6px;
+          background: rgba(255, 255, 255, 0.92);
+          color: #333;
+          font-size: 12px;
+          line-height: 1;
+          cursor: pointer;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: opacity 0.15s ease;
+        }
+
+        .codeBlockWrap:hover .copyBtn,
+        .copyBtn:focus-visible {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
         
         .cursor {
           display: inline-block;
@@ -294,6 +363,45 @@
       }
     }
   }
+}
+
+.loadingRow {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 12px;
+  pointer-events: none;
+}
+
+.backToBottom {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  background: #1890ff;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 8px 20px rgba(24, 144, 255, 0.28);
+  cursor: pointer;
+
+  &:hover {
+    background: #40a9ff;
+  }
+}
+
+.reconnectHint {
+  margin: 0 16px 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(178, 106, 0, 0.25);
+  border-radius: 8px;
+  background: rgba(255, 214, 102, 0.16);
+  color: #8a5a00;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .inputForm {
@@ -431,6 +539,14 @@
       &.assistant {
         .messageContent {
           border-color: #444;
+
+          .messageText {
+            .copyBtn {
+              background: rgba(40, 44, 52, 0.92);
+              color: #f5f5f5;
+              border-color: rgba(255, 255, 255, 0.28);
+            }
+          }
         }
       }
     }
@@ -450,6 +566,12 @@
 
   .statusBar {
     border-top-color: #444;
+  }
+
+  .reconnectHint {
+    border-color: rgba(255, 200, 87, 0.28);
+    background: rgba(255, 200, 87, 0.12);
+    color: #ffd166;
   }
 }
 

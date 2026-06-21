@@ -4,7 +4,7 @@ echo.
 echo 📋 检查环境配置...
 if not exist .env (
     echo ❌ .env 文件不存在，请先配置 API Key
-    echo 💡 复制 env.example 为 .env 并配置 OPENAI_API_KEY
+    echo 💡 复制 env.example 为 .env 并配置 DEEPSEEK_API_KEY
     pause
     exit /b 1
 )

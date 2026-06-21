@@ -1,0 +1,17 @@
+- generic [ref=e3]:
+  - generic [ref=e7]: 正在加载AI助手...
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - img "logo" [ref=e11]
+        - generic [ref=e12]: React Playground
+      - generic [ref=e13]:
+        - img "moon" [ref=e14] [cursor=pointer]:
+          - img [ref=e15]
+        - img "share-alt" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
+        - img "download" [ref=e20] [cursor=pointer]:
+          - img [ref=e21]
+    - generic [ref=e25]:
+      - generic [ref=e29]: 正在加载代码编辑器...
+      - generic [ref=e33]: 正在加载预览窗口...
